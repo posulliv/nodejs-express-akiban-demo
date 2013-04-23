@@ -15,10 +15,11 @@ var path = require('path')
 module.exports = {
   development: {
     db: 'mongodb://localhost/noobjs_dev',
+    akiban: 'https://d8cfb154_6263_489f_9f34_e5b96b42ecdf:95731f320b789fbaf5e6@db1.akiban.com:8091/v1',
     root: rootPath,
     notifier: notifier,
     app: {
-      name: 'Nodejs Express Mongoose Demo'
+      name: 'Nodejs Express Akiban Demo'
     },
     facebook: {
       clientID: "APP_ID",
@@ -46,7 +47,7 @@ module.exports = {
     root: rootPath,
     notifier: notifier,
     app: {
-      name: 'Nodejs Express Mongoose Demo'
+      name: 'Nodejs Express Akiban Demo'
     },
     facebook: {
       clientID: "APP_ID",

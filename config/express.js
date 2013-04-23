@@ -4,7 +4,7 @@
  */
 
 var express = require('express')
-  , mongoStore = require('connect-mongo')(express)
+  , AkStore = require('connect-akiban')
   , flash = require('connect-flash')
   , helpers = require('view-helpers')
 
@@ -40,13 +40,10 @@ module.exports = function (app, config, passport) {
     app.use(express.bodyParser())
     app.use(express.methodOverride())
 
-    // express/mongo session storage
+    // express/akiban session storage
     app.use(express.session({
-      secret: 'noobjs',
-      store: new mongoStore({
-        url: config.db,
-        collection : 'sessions'
-      })
+      store: new AkStore(config.akiban),
+      secret: 'noobjs'
     }))
 
     // connect flash for flash messages

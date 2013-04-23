@@ -31,6 +31,7 @@
     , "async": "latest"
     , "nodemon": "latest"
     , "view-helpers": "latest"
+    , "connect-akiban": "latest"
   }
   , "devDependencies": {
       "supertest": "latest",
