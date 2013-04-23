@@ -98,10 +98,13 @@ exports.update = function(req, res){
  */
 
 exports.show = function(req, res){
-  res.render('articles/show', {
-    title: req.article.title,
-    article: req.article
-  })
+  req.article.user(function(err, user) {
+    res.render('articles/show', {
+      title: req.article.title,
+      article: req.article,
+      username: user.name
+    })
+  });
 }
 
 /**
@@ -128,7 +131,6 @@ exports.index = function(req, res){
     page: page
   }
 
-  console.log(schema.models);
   Article.all(function(err, articles) {
     if (err) return res.render('500')
     Article.count(function (err, count) {

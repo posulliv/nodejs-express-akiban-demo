@@ -9,7 +9,7 @@ block content
       p=article.body
       p.author
         span Author :&nbsp;
-        a(href="/users/"+article.user_id)=article.user_id
+        a(href="/users/"+article.user_id)= username
       .date= formatDate(article.createdAt, "%b %d, %Y at %I:%M %p")
   p
     br
