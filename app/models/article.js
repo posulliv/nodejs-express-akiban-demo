@@ -84,5 +84,5 @@ Article.list = function (options, cb) {
     .exec(cb);
 
 }
-//schema.automigrate();
+
 module.exports = schema.models.Article;
