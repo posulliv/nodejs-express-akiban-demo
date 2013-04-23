@@ -4,10 +4,8 @@
  */
 
 var mongoose = require('mongoose')
-  , Imager = require('imager')
   , env = process.env.NODE_ENV || 'development'
   , config = require('../../config/config')[env]
-  , imagerConfig = require(config.root + '/config/imager.js')
   , Schema = mongoose.Schema
 
 /**
@@ -40,10 +38,6 @@ var ArticleSchema = new Schema({
     createdAt: { type : Date, default : Date.now }
   }],
   tags: {type: [], get: getTags, set: setTags},
-  image: {
-    cdnUri: String,
-    files: []
-  },
   createdAt  : {type : Date, default : Date.now}
 })
 
@@ -60,48 +54,20 @@ ArticleSchema.path('body').validate(function (body) {
 }, 'Article body cannot be blank')
 
 /**
- * Pre-remove hook
- */
-
-ArticleSchema.pre('remove', function (next) {
-  var imager = new Imager(imagerConfig, 'S3')
-  var files = this.image.files
-
-  // if there are files associated with the item, remove from the cloud too
-  imager.remove(files, function (err) {
-    if (err) return next(err)
-  }, 'article')
-
-  next()
-})
-
-/**
  * Methods
  */
 
 ArticleSchema.methods = {
 
   /**
-   * Save article and upload image
+   * Save article
    *
-   * @param {Object} images
    * @param {Function} cb
    * @api private
    */
 
-  uploadAndSave: function (images, cb) {
-    if (!images || !images.length) return this.save(cb)
-
-    var imager = new Imager(imagerConfig, 'S3')
-    var self = this
-
-    imager.upload(images, function (err, cdnUri, files) {
-      if (err) return cb(err)
-      if (files.length) {
-        self.image = { cdnUri : cdnUri, files : files }
-      }
-      self.save(cb)
-    }, 'article')
+  uploadAndSave: function (cb) {
+    this.save(cb);
   },
 
   /**

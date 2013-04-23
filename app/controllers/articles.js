@@ -4,7 +4,6 @@
  */
 
 var mongoose = require('mongoose')
-  , Imager = require('imager')
   , async = require('async')
   , Article = mongoose.model('Article')
   , _ = require('underscore')
@@ -43,7 +42,7 @@ exports.create = function (req, res) {
   var article = new Article(req.body)
   article.user = req.user
 
-  article.uploadAndSave(req.files.image, function (err) {
+  article.uploadAndSave(function (err) {
     if (err) {
       res.render('articles/new', {
         title: 'New Article',
@@ -76,7 +75,7 @@ exports.update = function(req, res){
   var article = req.article
   article = _.extend(article, req.body)
 
-  article.uploadAndSave(req.files.image, function(err) {
+  article.uploadAndSave(function(err) {
     if (err) {
       res.render('articles/edit', {
         title: 'Edit Article',

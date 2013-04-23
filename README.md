@@ -29,7 +29,6 @@ Then visit [http://localhost:3000/](http://localhost:3000/)
   |__routes.js
   |__config.js
   |__passport.js (auth config)
-  |__imager.js (imager config)
   |__express.js (express.js configs)
   |__middlewares/ (custom middlewares)
 -public/
