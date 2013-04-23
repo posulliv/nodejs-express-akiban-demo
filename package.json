@@ -15,6 +15,8 @@
   , "dependencies": {
       "express": "latest"
     , "jade": "latest"
+    , "jugglingdb": "latest"
+    , "jugglingdb-akiban": "latest"
     , "mongoose": "latest"
     , "connect-flash": "latest"
     , "passport": "latest"

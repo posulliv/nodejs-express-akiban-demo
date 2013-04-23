@@ -23,16 +23,20 @@ var express = require('express')
 var env = process.env.NODE_ENV || 'development'
   , config = require('./config/config')[env]
   , auth = require('./config/middlewares/authorization')
-  , mongoose = require('mongoose')
-
-// Bootstrap db connection
-mongoose.connect(config.db)
+  , jugglingdb = require('jugglingdb')
 
 // Bootstrap models
 var models_path = __dirname + '/app/models'
 fs.readdirSync(models_path).forEach(function (file) {
   require(models_path+'/'+file)
 })
+
+// Bootstrap db connection
+/*var Schema = jugglingdb.Schema;
+var schema = new Schema('akiban', config.akibandb);
+schema.automigrate();
+module.exports = schema;*/
+
 
 // bootstrap passport config
 require('./config/passport')(passport, config)

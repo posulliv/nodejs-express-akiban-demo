@@ -3,8 +3,8 @@
  * Module dependencies.
  */
 
-var mongoose = require('mongoose')
-  , Article = mongoose.model('Article')
+var jugglingdb = require('jugglingdb')
+  , Article = require('../models/article')
 
 /**
  * List items tagged with a tag

@@ -3,8 +3,8 @@
  * Module dependencies.
  */
 
-var mongoose = require('mongoose')
-  , User = mongoose.model('User')
+var jugglingdb = require('jugglingdb')
+  , User = require('../models/user')
 
 exports.signin = function (req, res) {}
 
@@ -90,12 +90,10 @@ exports.show = function (req, res) {
  */
 
 exports.user = function (req, res, next, id) {
-  User
-    .findOne({ _id : id })
-    .exec(function (err, user) {
-      if (err) return next(err)
-      if (!user) return next(new Error('Failed to load User ' + id))
-      req.profile = user
-      next()
-    })
+  User.find(id, function (err, user) {
+    if (err) return next(err);
+    if (!user) return next(new Error('Failed to load User ' + id));
+    req.profile = user;
+    next();
+  });
 }

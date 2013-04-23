@@ -3,36 +3,41 @@
  * Module dependencies.
  */
 
-var mongoose = require('mongoose')
-  , Schema = mongoose.Schema
+var jugglingdb = require('jugglingdb')
+  , Schema = jugglingdb.Schema
+  , env = process.env.NODE_ENV || 'development'
+  , config = require('../../config/config')[env]
   , crypto = require('crypto')
   , _ = require('underscore')
+  , Article = require('./article')
+
+
+var schema = new Schema('akiban', config.akibandb);
 
 /**
  * User Schema
  */
 
-var UserSchema = new Schema({
-  name: String,
-  email: String,
-  username: String,
-  provider: String,
+var User = schema.define('User', {
+  name:            String,
+  email:           String,
+  username:        String,
+  provider:        String,
   hashed_password: String,
-  salt: String
-})
+  salt:            String
+});
 
-/**
- * Virtuals
- */
+// User.registerProperty('password');
 
-UserSchema
-  .virtual('password')
-  .set(function(password) {
-    this._password = password
-    this.salt = this.makeSalt()
-    this.hashed_password = this.encryptPassword(password)
-  })
-  .get(function() { return this._password })
+User.setter.password = function(password) {
+  this._password = password;
+  this.salt = this.makeSalt();
+  this.hashed_password = this.encryptPassword(password);
+}
+
+User.getter.password = function() {
+  return this._password;
+}
 
 /**
  * Validations
@@ -46,56 +51,51 @@ var validatePresenceOf = function (value) {
  * Pre-save hook
  */
 
-UserSchema.pre('save', function(next) {
-  if (!this.isNew) return next()
+User.beforeSave = function(next) {
+  if (!this.isNewRecord) return next()
 
   if (!validatePresenceOf(this.password))
     next(new Error('Invalid password'))
   else
     next()
-})
 
+}
 /**
  * Methods
  */
 
-UserSchema.methods = {
-
-  /**
-   * Authenticate - check if the passwords are the same
-   *
-   * @param {String} plainText
-   * @return {Boolean}
-   * @api public
-   */
-
-  authenticate: function(plainText) {
-    return this.encryptPassword(plainText) === this.hashed_password
-  },
-
-  /**
-   * Make salt
-   *
-   * @return {String}
-   * @api public
-   */
-
-  makeSalt: function() {
-    return Math.round((new Date().valueOf() * Math.random())) + ''
-  },
-
-  /**
-   * Encrypt password
-   *
-   * @param {String} password
-   * @return {String}
-   * @api public
-   */
-
-  encryptPassword: function(password) {
-    if (!password) return ''
-    return crypto.createHmac('sha1', this.salt).update(password).digest('hex')
-  }
+/**
+ * Authenticate - check if the passwords are the same
+ *
+ * @param {String} plainText
+ * @return {Boolean}
+ * @api public
+ */
+User.prototype.authenticate = function(plainText) {
+  return this.encryptPassword(plainText) === this.hashed_password;
 }
 
-mongoose.model('User', UserSchema)
+/**
+ * Make salt
+ *
+ * @return {String}
+ * @api public
+ */
+User.prototype.makeSalt = function() {
+  return Math.round((new Date().valueOf() * Math.random())) + '';
+}
+
+/**
+ * Encrypt password
+ *
+ * @param {String} password
+ * @return {String}
+ * @api public
+ */
+User.prototype.encryptPassword = function(password) {
+  if (!password) return '';
+  return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
+}
+
+//schema.automigrate();
+module.exports = schema.models.User;

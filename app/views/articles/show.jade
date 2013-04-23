@@ -9,15 +9,8 @@ block content
       p=article.body
       p.author
         span Author :&nbsp;
-        a(href="/users/"+article.user._id)=article.user.name
+        a(href="/users/"+article.user_id)=article.user_id
       .date= formatDate(article.createdAt, "%b %d, %Y at %I:%M %p")
-      if (article.tags)
-        .tags
-          | Tags :&nbsp;
-          each tag in article.tags.split(',')
-            a.tag(href="/tags/"+tag)
-              i.icon-tags
-              |  #{tag}
   p
     br
     form.center.form-inline.confirm(action="/articles/"+article.id, method="post")
@@ -26,9 +19,3 @@ block content
       input(type="hidden", name="_method", value="DELETE")
       button.btn.btn-danger(type="submit") delete
 
-  p
-    br
-    h2 Comments
-    each comment in article.comments
-      include ../comments/comment
-    include ../comments/form

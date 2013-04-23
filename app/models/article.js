@@ -3,72 +3,39 @@
  * Module dependencies.
  */
 
-var mongoose = require('mongoose')
+var jugglingdb = require('jugglingdb')
   , env = process.env.NODE_ENV || 'development'
   , config = require('../../config/config')[env]
-  , Schema = mongoose.Schema
+  , Schema = jugglingdb.Schema
+  , User = require('./user')
 
-/**
- * Getters
- */
-
-var getTags = function (tags) {
-  return tags.join(',')
-}
-
-/**
- * Setters
- */
-
-var setTags = function (tags) {
-  return tags.split(',')
-}
+var schema = new Schema('akiban', config.akibandb);
 
 /**
  * Article Schema
  */
 
-var ArticleSchema = new Schema({
-  title: {type : String, default : '', trim : true},
-  body: {type : String, default : '', trim : true},
-  user: {type : Schema.ObjectId, ref : 'User'},
-  comments: [{
-    body: { type : String, default : '' },
-    user: { type : Schema.ObjectId, ref : 'User' },
-    createdAt: { type : Date, default : Date.now }
-  }],
-  tags: {type: [], get: getTags, set: setTags},
-  createdAt  : {type : Date, default : Date.now}
+var Article = schema.define('Article', {
+  title     : {type : String, default : '', trim : true},
+  body      : {type : String, default : '', trim : true},
+  user_id   : {type : Number},
+  createdAt : {type : Date, default : Date.now},
 })
-
-/**
- * Validations
- */
-
-ArticleSchema.path('title').validate(function (title) {
-  return title.length > 0
-}, 'Article title cannot be blank')
-
-ArticleSchema.path('body').validate(function (body) {
-  return body.length > 0
-}, 'Article body cannot be blank')
+Article.belongsTo(User, {as: 'user', foreignKey: 'user_id'});
 
 /**
  * Methods
  */
 
-ArticleSchema.methods = {
-
-  /**
-   * Save article
-   *
-   * @param {Function} cb
-   * @api private
-   */
-
-  uploadAndSave: function (cb) {
-    this.save(cb);
-  },
+/**
+ * Save article
+ *
+ * @param {Function} cb
+ * @api private
+ */
+Article.prototype.uploadAndSave = function (cb) {
+  this.save(cb);
+}
 
   /**
    * Add comment
@@ -79,65 +46,43 @@ ArticleSchema.methods = {
    * @api private
    */
 
-  addComment: function (user, comment, cb) {
-    var notify = require('../mailer/notify')
+Article.prototype.addComment = function (user, comment, cb) {
+  this.comments.push({
+    body: comment.body,
+    user: user._id
+  })
 
-    this.comments.push({
-      body: comment.body,
-      user: user._id
-    })
-
-    notify.comment({
-      article: this,
-      currentUser: user,
-      comment: comment.body
-    })
-
-    this.save(cb)
-  }
-
+  this.save(cb)
 }
 
 /**
  * Statics
  */
 
-ArticleSchema.statics = {
-
-  /**
-   * Find article by id
-   *
-   * @param {ObjectId} id
-   * @param {Function} cb
-   * @api private
-   */
-
-  load: function (id, cb) {
-    this.findOne({ _id : id })
-      .populate('user', 'name email')
-      .populate('comments.user')
-      .exec(cb)
-  },
-
-  /**
-   * List articles
-   *
-   * @param {Object} options
-   * @param {Function} cb
-   * @api private
-   */
-
-  list: function (options, cb) {
-    var criteria = options.criteria || {}
-
-    this.find(criteria)
-      .populate('user', 'name')
-      .sort({'createdAt': -1}) // sort by date
-      .limit(options.perPage)
-      .skip(options.perPage * options.page)
-      .exec(cb)
-  }
-
+/**
+ * Find article by id
+ *
+ * @param {ObjectId} id
+ * @param {Function} cb
+ * @api private
+ */
+Article.load = function (id, cb) {
+  this.find(id, cb);
 }
 
-mongoose.model('Article', ArticleSchema)
+/**
+ * List articles
+ *
+ * @param {Object} options
+ * @param {Function} cb
+ * @api private
+ */
+Article.list = function (options, cb) {
+  var criteria = options.criteria || {}
+
+  Article.all(criteria)
+    .exec(cb);
+
+}
+//schema.automigrate();
+module.exports = schema.models.Article;

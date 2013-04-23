@@ -2,7 +2,7 @@ extends ../layouts/default
 
 block content
   - var action = '/articles'
-  if (!article.isNew)
+  if (!article.isNewRecord)
     - action += '/'+article.id
 
   if (typeof errors !== 'undefined')
@@ -15,7 +15,7 @@ block content
   .row
     .span7
       form.form-horizontal(method="post", action=action, enctype="multipart/form-data")
-        if (!article.isNew)
+        if (!article.isNewRecord)
           input(type="hidden", name="_method", value="PUT")
 
         .control-group
@@ -28,15 +28,7 @@ block content
           .controls
             textarea#desc.input-xlarge(type='text', rows="5", name="body", placeholder='Enter the article description')=article.body
 
-        .control-group
-          label.control-label(for='desc') Tags
-          .controls
-            input#tags(type='text', name="tags", value=article.tags, placeholder='Enter the tags')
-
         .form-actions
           button.btn.btn-primary(type='submit') Save changes
           &nbsp;
           a.btn(href='/articles', title="cancel") Cancel
-    .span5
-      if (!article.isNew && article.image && article.image.files && article.image.files.length)
-        img(src=article.image.cdnUri + '/mini_' + article.image.files[0])

@@ -3,19 +3,23 @@
  * Module dependencies.
  */
 
-var mongoose = require('mongoose')
+var jugglingdb = require('jugglingdb')
   , async = require('async')
-  , Article = mongoose.model('Article')
+  , Schema = jugglingdb.Schema
+  , env = process.env.NODE_ENV || 'development'
+  , config = require('../../config/config')[env]
   , _ = require('underscore')
+  , Article = require('../models/article')
+
+var schema = new Schema('akiban', config.akibandb);
 
 /**
  * Find article by id
  */
 
 exports.article = function(req, res, next, id){
-  var User = mongoose.model('User')
 
-  Article.load(id, function (err, article) {
+  Article.find(id, function (err, article) {
     if (err) return next(err)
     if (!article) return next(new Error('Failed to load article ' + id))
     req.article = article
@@ -39,8 +43,8 @@ exports.new = function(req, res){
  */
 
 exports.create = function (req, res) {
-  var article = new Article(req.body)
-  article.user = req.user
+  var article = new Article(req.body);
+  article.user_id = req.user.id;
 
   article.uploadAndSave(function (err) {
     if (err) {
@@ -124,9 +128,10 @@ exports.index = function(req, res){
     page: page
   }
 
-  Article.list(options, function(err, articles) {
+  console.log(schema.models);
+  Article.all(function(err, articles) {
     if (err) return res.render('500')
-    Article.count().exec(function (err, count) {
+    Article.count(function (err, count) {
       res.render('articles/index', {
         title: 'List of Articles',
         articles: articles,
