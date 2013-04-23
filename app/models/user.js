@@ -27,7 +27,7 @@ var User = schema.define('User', {
   salt:            String
 });
 
-// User.registerProperty('password');
+User.registerProperty('password');
 
 User.setter.password = function(password) {
   this._password = password;
@@ -58,8 +58,8 @@ User.beforeSave = function(next) {
     next(new Error('Invalid password'))
   else
     next()
-
 }
+
 /**
  * Methods
  */

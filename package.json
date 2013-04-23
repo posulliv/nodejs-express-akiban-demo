@@ -15,7 +15,7 @@
   , "dependencies": {
       "express": "latest"
     , "jade": "latest"
-    , "jugglingdb": "latest"
+    , "jugglingdb": "0.2.0-29"
     , "jugglingdb-akiban": "latest"
     , "mongoose": "latest"
     , "connect-flash": "latest"
