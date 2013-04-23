@@ -1,35 +1,22 @@
-[![Build Status](https://travis-ci.org/madhums/nodejs-express-mongoose-demo.png)](https://travis-ci.org/madhums/nodejs-express-mongoose-demo)
+# Nodejs Express Akiban Demo
 
-# Nodejs Express Mongoose Demo
-
-**Blog post 1:** [Breaking down app.js file - nodejs, express, mongoose](http://madhums.me/2012/07/19/breaking-down-app-js-file-nodejs-express-mongoose/)
-
-**Blog post 2:** Coming soon!
-
-This is a demo node.js application illustrating various features used in everyday web development, with a fine touch of best practices. The demo app is a blog application where users (signing up using facebook, twitter, github and simple registrations) can create an article, delete an article and add comments on the article.
+This is a demo node.js blog application where users can create an
+article, delete an article, and add comments on the article.
 
 ## Install
 
-**NOTE:** You need to have node.js, mongodb and [imagemagick](http://www.imagemagick.org/script/index.php) installed and running.
-
 ```sh
-  $ git clone git://github.com/madhums/nodejs-express-mongoose-demo.git
+  $ git clone git://github.com/posulliv/nodejs-express-akiban-demo.git
+  $ cd nodejs-express-akiban-demo
   $ npm install
   $ cp config/config.example.js config/config.js
-  $ cp config/imager.example.js config/imager.js
   $ npm start
 ```
 
-**NOTE:** Do not forget to update your facebook twitter and github APP_ID and APP_SECRET in `config/config.js`. Also if you want to use image uploads, don't forget to replace the S3 and Rackspace keys in `config/imager.js`.
+**NOTE:** Do not forget to update your facebook, twitter, and github
+`APP_ID` and `APP_SECRET` in `config/config.js`.
 
 Then visit [http://localhost:3000/](http://localhost:3000/)
-
-## Info
-
-1. [node-genem](https://github.com/madhums/node-genem) A module to generate the MVC skeleton using this approach.
-2. [node-notifier](http://github.com/madhums/node-notifier) - used for notifications via emails and push notificatiions
-3. [node-imager](http://github.com/madhums/node-imager) - used to resize, crop and upload images to S3/rackspace
-4. [node-view-helpers](http://github.com/madhums/node-view-helpers) - some common view helpers
 
 ## Directory structure
 ```
@@ -48,13 +35,8 @@ Then visit [http://localhost:3000/](http://localhost:3000/)
 -public/
 ```
 
-## Tests
-
-```sh
-$ npm test
-```
-
 ## License
+
 (The MIT License)
 
 Copyright (c) 2012 Madhusudhan Srinivasa < [madhums8@gmail.com](mailto:madhums8@gmail.com) >

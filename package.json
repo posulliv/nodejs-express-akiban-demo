@@ -1,6 +1,6 @@
 {
     "name": "noobjs"
-  , "description": "A demo app in nodejs illustrating the use of express, jade and mongoose"
+  , "description": "A demo app in nodejs illustrating the use of express, jade and Akiban"
   , "version": "3.0.0"
   , "private": false
   , "author": "Madhusudhan Srinivasa <madhums8@gmail.com> (http://madhums.github.com)"
@@ -16,7 +16,6 @@
       "express": "latest"
     , "jade": "latest"
     , "mongoose": "latest"
-    , "connect-mongo": "latest"
     , "connect-flash": "latest"
     , "passport": "latest"
     , "passport-local": "latest"
