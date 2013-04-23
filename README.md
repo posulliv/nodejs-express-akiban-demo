@@ -13,9 +13,8 @@ article, delete an article, and add comments on the article.
   $ npm start
 ```
 
-**NOTE:** Do not forget to update your facebook, twitter, and github
-`APP_ID` and `APP_SECRET` in `config/config.js`. Also, update the akiban
-section in `config/config.js` to point to your deployment.
+**NOTE:** Do not forget to update the akiban section in
+`config/config.js` to point to your deployment.
 
 Then visit [http://localhost:3000/](http://localhost:3000/)
 
