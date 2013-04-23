@@ -10,9 +10,6 @@ block content
       p=article.body
       .author
         span= formatDate(article.createdAt, "%b %d, %Y at %I:%M %p")
-        span &nbsp;| Author :&nbsp;
-        a(href="/users/"+article.user_id)=article.user_id
-        | &nbsp;|&nbsp;
 
   if (pages > 1)
     .pagination
